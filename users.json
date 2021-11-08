@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "Bob Sinclair",
+        "email": "bob@mail.com",
+        "phone": "+15555656",
+        "job": "musician"
+    },
+    {
+        "id": 2,
+        "name": "Simon Templar",
+        "email": "simon@mail.com",
+        "phone": "+15556565",
+        "job": "actor"
+    },
+    {
+        "id": 3,
+        "name": "John Carmack",
+        "email": "doom@mail.com",
+        "phone": "+15550000",
+        "job": "programer"
+    },
+    {
+        "id": 4,
+        "name": "Steve Jossap",
+        "email": "stevie@mail.com",
+        "phone": "+15558888",
+        "job": "driver"
+    }
+]
