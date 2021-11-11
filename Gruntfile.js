@@ -14,8 +14,8 @@ module.exports = function (grunt) {
 
 		watch: {
 			scripts: {
-				files: ["src/**/*.js", "src/**/*.html", "src/**/*.css"],
-				tasks: ["uglify"],
+				files: ["src/**/*.js", "src/**/*.html", "src/**/*.css", "src/**/*.jade"],
+				tasks: ["dev"],
 				options: {
 					spawn: false,
 				},
@@ -58,18 +58,6 @@ module.exports = function (grunt) {
 			},
 			all: ["Gruntfile.js", "src/js/*.js"],
 		},
-		imagemin: {
-			dynamic: {
-				files: [
-					{
-						expand: true,
-						cwd: "src/img/",
-						src: ["**/*.{png,jpg,gif}"],
-						dest: "build/img/",
-					},
-				],
-			},
-		},
 	});
 
 	// Load the plugin that provides the "uglify" task.
@@ -82,5 +70,5 @@ module.exports = function (grunt) {
 
 	// Default task(s).
 	grunt.registerTask("default", ["watch"]);
-	grunt.registerTask("dev", ["jshint", "clean", "copy", "uglify", "imagemin"]);
+	grunt.registerTask("dev", ["jshint", "clean", "copy", "uglify"]);
 };
