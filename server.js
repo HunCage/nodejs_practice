@@ -13,12 +13,14 @@ mongoose.connect("mongodb://localhost/superhero");
 
 let Users = require("./models/users");
 Users.setConnection(mongoose);
+
+/* Create */
 /* Users.create(
 	{
-		name: "Guppy James",
-		email: "guppy@email.com",
+		name: "Krumpli Jani",
+		email: "jani@email.com",
 		phone: "+4155667788",
-		address: "2500, Biel, Neumarkt 11",
+		address: "3000, bern, Neumarkt 11",
 		role: 3,
 		meta: {
 			birthsday: new Date("12.11.1989"),
@@ -28,13 +30,14 @@ Users.setConnection(mongoose);
 	function (saved) {
 		console.info("Model saved: ", saved);
 	}
-); */
-
+);
+ */
 /* MongoDB queries */
 /* Users.read({'role': 1}, function (users) {
 	console.info("Users: ", users);
 }); */
 
+/* Find */
 /* Users.first({ role: { $lte: 5, $gte: 3 } }, function (user) {
 	if (user !== null) {
 		console.info("User name: ", user.name);
@@ -44,13 +47,46 @@ Users.setConnection(mongoose);
 });
  */
 
-Users.first({ name: new RegExp("guppy", "gi") }, function (user) {
+/* Update */
+/* Users.getModel().update(
+	{ name: new RegExp("guppy", "gi") },
+	{ name: "Jack Black" },
+	function (error, user) {
+		// user.name = "Jack Black";
+		// user.save();
+		if (error) {
+			console.error(error);
+		} else {
+			console.log(user);
+		}
+	}
+);
+ */
+/* Delete */
+/* Users.getModel().remove(
+	{ name: new RegExp("jani", "gi") },
+	function (error, removed) {
+		if (error) {
+			console.error(error);
+		} else {
+			console.log(removed);
+		}
+	}
+); */
+
+/* Read */
+/* Users.first({ name: new RegExp("guppy", "gi") }, function (user) {
 	if (user !== null) {
 		console.info("User name: ", user.name);
 	} else {
 		console.info("No match found!");
 	}
-});
+}); */
+
+/* Users.getModel().isAdmin(2, function (error, data) {
+	console.log(error);
+	console.log(data);
+}); */
 
 // Users.read({ name: "madcage" }, function (data) {
 // 	console.log(data);

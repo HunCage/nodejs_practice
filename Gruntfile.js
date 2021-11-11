@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 
 		watch: {
 			scripts: {
-				files: ["src/**/*.js", "src/**/*.html", "src/**/*.css", "src/**/*.jade"],
+				files: ['src/**/*.js', 'src/**/*.html', 'src/**/*.css', 'src/**/*.jade'],
 				tasks: ["dev"],
 				options: {
 					spawn: false,
@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 					{
 						expand: true,
 						cwd: "src/",
-						src: ["**/*.html", "img/*"],
+						src: ["**/*.html", "**/*.jade", "img/*"],
 						dest: "build/",
 						filter: "isFile",
 					},
@@ -66,7 +66,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-clean");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-copy");
-	grunt.loadNpmTasks("grunt-contrib-imagemin");
+	// grunt.loadNpmTasks("grunt-contrib-imagemin");
 
 	// Default task(s).
 	grunt.registerTask("default", ["watch"]);

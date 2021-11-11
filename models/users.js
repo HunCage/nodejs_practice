@@ -1,8 +1,4 @@
-// let Model = function () {
-
-// }
-
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 // mongoose.connect("mongodb://localhost/test");
 // const itf = require("../models/itf");
 
@@ -15,21 +11,43 @@ function setConnection(mongodb) {
 }
 
 function setModel() {
-	Users = db.model(
-		"Users",
-		{
-			name: String,
-			email: String,
-			phone: String,
-			address: String,
-			role: Number,
-			meta: {
-				birthsday: Date,
-				hobby: String,
-			},
+	const Schema = mongoose.Schema;
+
+	/* Users Schema */
+	const userSchema = new Schema({
+		name: String,
+		email: String,
+		phone: String,
+		address: String,
+		role: Number,
+		meta: {
+			birthsday: Date,
+			hobby: String,
 		},
-		"Users"
-	);
+		orders: [{ type: Schema.Types.ObjectId, ref: "Orders" }],
+	});
+
+	userSchema.statics.isAdmin = function (param, callBack) {
+		return this.find({ role: { $lte: 2 } }, callBack);
+	};
+
+	Users = db.model("Users", userSchema, "Users");
+
+	/* Order Schema */
+	const orderSchema = new Schema({
+		_creator: { type: Schema.Types.ObjectId, ref: "Users" },
+		insDate: Date,
+		description: String,
+		product: String,
+		amount: Number,
+		deadline: Date,
+	});
+
+	Orders = db.model("Orders", orderSchema, "Orders");
+}
+
+function getModel() {
+	return Users;
 }
 
 function read(where, callBack) {
@@ -78,5 +96,7 @@ module.exports = {
 	setConnection: setConnection,
 	read: read,
 	create: create,
-    first: first,
+	first: first,
+	// model: Users,
+	getModel: getModel,
 };
