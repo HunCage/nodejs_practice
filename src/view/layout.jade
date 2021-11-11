@@ -1,0 +1,44 @@
+- var classes = ['main', 'large', 'no-padding'];
+- var atts = {'data-ng-change': 'runChangeMethod()'};
+
+doctype html
+html.h-100(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description' content='')
+        meta(name='author' content='Mark Otto, Jacob Thornton, and Bootstrap contributors')
+        meta(name='generator' content='Hugo 0.88.1')
+        link(rel='shortcut icon' href='img/favicon.ico' type='image/x-icon')
+        title nodeJS Practice
+        link(rel='canonical' href='https://getbootstrap.com/docs/4.6/examples/sticky-footer-navbar/')
+        // Bootstrap core CSS
+        link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css' integrity='sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn' crossorigin='anonymous')
+        script(
+            src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous")
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        script(src='js/all.js' type='text/javascript')
+        style.
+            .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            }
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+                }
+            }
+        //- link(href="style.css" rel="stylesheet" type="text/css")
+    body.d-flex.flex-column.h-100
+
+include ./menu.jade
+
+block content
+
+include ./footer.jade
