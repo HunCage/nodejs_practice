@@ -14,6 +14,23 @@ mongoose.connect("mongodb://localhost/superhero");
 let Users = require("./models/users");
 Users.setConnection(mongoose);
 
+/* Save User Order */
+Users.first({ name: new RegExp("jani", "gi") }, function (user) {
+	if (user !== null) {
+		/* 		let order = new Users.getModel("Orders");
+		order._creator = user._id;
+		order.insDate = new Date();
+		order.description = "Gratulation";
+		order.product = "Keyboard";
+		order.amount = 49.99;
+		order.deadline = new Date("2021-12-21");
+		order.save(); */
+		console.info("User: ", user);
+	} else {
+		console.info("No match found!");
+	}
+});
+
 /* Create */
 /* Users.create(
 	{
@@ -48,7 +65,7 @@ Users.setConnection(mongoose);
  */
 
 /* Update */
-/* Users.getModel().update(
+Users.getModel().update(
 	{ name: new RegExp("guppy", "gi") },
 	{ name: "Jack Black" },
 	function (error, user) {
@@ -61,7 +78,7 @@ Users.setConnection(mongoose);
 		}
 	}
 );
- */
+
 /* Delete */
 /* Users.getModel().remove(
 	{ name: new RegExp("jani", "gi") },
@@ -105,6 +122,8 @@ mad.tu(str, function (error, newStr) {
 });
 /* Middleware */
 app.use(express.static(staticDir));
+app.set('view engine', 'jade');
+app.set('views', './src/view');
 // app.use(express.static(path.join(__dirname, staticDir)));
 // app.use('/static',express.static(__dirname + "build/"));
 // app.use(favicon(path.join(__dirname, staticDir + "/img/", "favicon.ico")));

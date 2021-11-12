@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 // mongoose.connect("mongodb://localhost/test");
 // const itf = require("../models/itf");
 
-let db, Users;
+let db,
+	Users,
+	Orders,
+	models = {};
 
 function setConnection(mongodb) {
 	db = mongodb;
@@ -35,6 +38,7 @@ function setModel() {
 
 	/* Order Schema */
 	const orderSchema = new Schema({
+		_id: Schema.Types.ObjectId,
 		_creator: { type: Schema.Types.ObjectId, ref: "Users" },
 		insDate: Date,
 		description: String,
@@ -44,10 +48,17 @@ function setModel() {
 	});
 
 	Orders = db.model("Orders", orderSchema, "Orders");
+
+	models["Users"] = Users;
+	models["Orders"] = Orders;
 }
 
-function getModel() {
-	return Users;
+function getModel(modelName) {
+	if (!modelName) {
+		return Users;
+	} else {
+		return models[modelName];
+	}
 }
 
 function read(where, callBack) {

@@ -1,5 +1,5 @@
 // const jQuery = require('jquery');
 
-jQuery.getJSON("users", function (users) {
-	console.log("users", users);
+$.getJSON("users", function (users) {
+	console.log("users: ", users);
 });
