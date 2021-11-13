@@ -1,71 +1,71 @@
-const { info } = require("console");
 const express = require("express");
 const fs = require("fs");
 const mongoose = require("mongoose");
 const app = express();
 // const favicon = require("serve-favicon");
 // const path = require("path");
+
+/* Globals */
 const PORT = 3000;
 const staticDir = "build";
 
 /* mongoDB / mongoose */
 mongoose.connect("mongodb://localhost/superhero");
-
 let Users = require("./models/users");
 Users.setConnection(mongoose);
 
 /* Save User Order */
-Users.first({ name: new RegExp("jani", "gi") }, function (user) {
-	if (user !== null) {
-		/* 		let order = new Users.getModel("Orders");
-		order._creator = user._id;
-		order.insDate = new Date();
-		order.description = "Gratulation";
-		order.product = "Keyboard";
-		order.amount = 49.99;
-		order.deadline = new Date("2021-12-21");
-		order.save(); */
-		console.info("User: ", user);
-	} else {
-		console.info("No match found!");
-	}
-});
+// Users.first({ name: new RegExp("jani", "gi") }, function (user) {
+// 	if (user !== null) {
+// 		/* 		let order = new Users.getModel("Orders");
+// 		order._creator = user._id;
+// 		order.insDate = new Date();
+// 		order.description = "Gratulation";
+// 		order.product = "Keyboard";
+// 		order.amount = 49.99;
+// 		order.deadline = new Date("2021-12-21");
+// 		order.save(); */
+// 		console.info("User: ", user);
+// 	} else {
+// 		console.info("No match found!");
+// 	}
+// });
 
 /* Create */
-/* Users.create(
-	{
-		name: "Krumpli Jani",
-		email: "jani@email.com",
-		phone: "+4155667788",
-		address: "3000, bern, Neumarkt 11",
-		role: 3,
-		meta: {
-			birthsday: new Date("12.11.1989"),
-			hobby: "programming",
-		},
-	},
-	function (saved) {
-		console.info("Model saved: ", saved);
-	}
-);
- */
+// Users.create(
+// 	{
+// 		name: "John Doe",
+// 		email: "doe@email.com",
+// 		phone: "+4175667788",
+// 		address: "2500, Biel, Neumarkt 11",
+// 		role: 3,
+// 		meta: {
+// 			birthsday: new Date("12.11.1979"),
+// 			hobby: "programming",
+// 		},
+// 	},
+// 	function (saved) {
+// 		console.info("Model saved: ", saved);
+// 	}
+// );
+
 /* MongoDB queries */
-/* Users.read({'role': 1}, function (users) {
+Users.read({'role': 1}, function (users) {
 	console.info("Users: ", users);
-}); */
+});
 
 /* Find */
-/* Users.first({ role: { $lte: 5, $gte: 3 } }, function (user) {
+Users.first({ role: { $lte: 5, $gte: 3 } }, function (user) {
 	if (user !== null) {
 		console.info("User name: ", user.name);
 	} else {
 		console.info("No match found!");
 	}
 });
- */
+
 
 /* Update */
-Users.getModel().update(
+/* Users.getModel().update(
 	{ name: new RegExp("guppy", "gi") },
 	{ name: "Jack Black" },
 	function (error, user) {
@@ -78,7 +78,7 @@ Users.getModel().update(
 		}
 	}
 );
-
+ */
 /* Delete */
 /* Users.getModel().remove(
 	{ name: new RegExp("jani", "gi") },
@@ -92,13 +92,13 @@ Users.getModel().update(
 ); */
 
 /* Read */
-/* Users.first({ name: new RegExp("guppy", "gi") }, function (user) {
+Users.first({ name: new RegExp("guppy", "gi") }, function (user) {
 	if (user !== null) {
 		console.info("User name: ", user.name);
 	} else {
 		console.info("No match found!");
 	}
-}); */
+});
 
 /* Users.getModel().isAdmin(2, function (error, data) {
 	console.log(error);
@@ -110,7 +110,7 @@ Users.getModel().update(
 // });
 
 /* Module practice */
-const mad = require("./my_modules/mad_module");
+/* const mad = require("./my_modules/mad_module");
 
 let str = "Hi on the wire!";
 mad.tu(str, function (error, newStr) {
@@ -119,19 +119,23 @@ mad.tu(str, function (error, newStr) {
 	} else {
 		console.log(newStr);
 	}
-});
+});*/
+
 /* Middleware */
 app.use(express.static(staticDir));
-app.set('view engine', 'jade');
-app.set('views', './src/view');
+app.set("view engine", "jade");
+app.set("views", "./src/view");
 // app.use(express.static(path.join(__dirname, staticDir)));
 // app.use('/static',express.static(__dirname + "build/"));
 // app.use(favicon(path.join(__dirname, staticDir + "/img/", "favicon.ico")));
 
 app.use(function (req, res, next) {
+	// console.log(req.headers);
+
 	if (req.headers["x-requested-with"] == "XMLHttpRequest") {
-		res.send(JSON.stringify({ "Hi, ": "on the wire!" }));
-		console.log("AJAX request in progress");
+		Users.getModel().find({}, function (error, data) {
+			res.send(JSON.stringify(data));
+		});
 	} else {
 		next();
 	}
@@ -174,7 +178,7 @@ function handleUsers(req, res, next, callback) {
 }
 
 app.get("/", function (req, res) {
-	// console.log(req.url);
+	console.log(req.url);
 	handleUsers(req, res, false, function (allUsers) {
 		res.render("index", {
 			title: "Hey,",
@@ -195,10 +199,10 @@ app.get("/users", function (req, res) {
 	});
 });
 
-app.get("/users/:id", function (req, res) {
+/* app.get("/users/:id", function (req, res) {
 	console.log(req.url);
 	handleUsers(req, res);
-});
+}); */
 
 /* Server */
 app.listen(PORT, () => {

@@ -2,10 +2,10 @@ extends ./layout.jade
 
 block content
     main.flex-shrink-0(role='main')
-        .container
-            h1.mt-5= title
-            h2(class=classes)= message
-            p.lead&attributes(atts)
+        .container.mt-3
+            h1.mt-5.pt-5.text-center= title
+            h2.text-center= message
+            p.lead
                 | Take Off!
                 | A fixed navbar has been added with 
                 code padding-top: 60px;
@@ -15,9 +15,32 @@ block content
             p
                 | Back to
                 a(href='../examples/sticky-footer/') the default sticky footer
-                | 					minus the navbar.
-            ul 
-                each user in users
-                    li id: #{user.id}: name: #{user.name}, email: #{user.email}, #{user.job}
+                | minus the navbar.
+            .row(data-ng-controller='priceController')
+                .col-xs-3
+                    input.form-control(data-ng-model='yourPrice')
+                    hr
+                    p My Price: {{calcOwnPrice(yourPrice) | currencyFilter: 'CHF'}}   
+                    p Your Price: {{calcOtherPrice(yourPrice) | currencyFilter}}   
+                    p Full Price: {{yourPrice | currencyFilter: 'HUF'}}   
+                    //- p Full Price: {{calcFullPrice(yourPrice) | currencyFilter: 'HUF'}}   
 
-block content
+            .row(data-ng-controller='userController')
+                .col-xs-9
+                    p {{yourPrice}}
+                    table.table.table-dark
+                        thead 
+                            tr 
+                                th(data-ng-repeat='th in ths') {{th}}
+                        tbody
+                            tr(data-ng-repeat='row in users')
+                                td {{row._id}}
+                                td {{row.name}}
+                                td {{row.email}}
+                                td {{row.phone}}
+
+
+
+            ul.mt-5
+            each user in users
+                li.mb-5 id: #{user.id}: name: #{user.name}, email: #{user.email}, #{user.job}
