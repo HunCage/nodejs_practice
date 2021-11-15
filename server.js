@@ -11,103 +11,9 @@ const staticDir = "build";
 
 /* mongoDB / mongoose */
 mongoose.connect("mongodb://localhost/superhero");
-let Users = require("./models/users");
-Users.setConnection(mongoose);
-
-/* Save User Order */
-// Users.first({ name: new RegExp("jani", "gi") }, function (user) {
-// 	if (user !== null) {
-// 		/* 		let order = new Users.getModel("Orders");
-// 		order._creator = user._id;
-// 		order.insDate = new Date();
-// 		order.description = "Gratulation";
-// 		order.product = "Keyboard";
-// 		order.amount = 49.99;
-// 		order.deadline = new Date("2021-12-21");
-// 		order.save(); */
-// 		console.info("User: ", user);
-// 	} else {
-// 		console.info("No match found!");
-// 	}
-// });
-
-/* Create */
-// Users.create(
-// 	{
-// 		name: "John Doe",
-// 		email: "doe@email.com",
-// 		phone: "+4175667788",
-// 		address: "2500, Biel, Neumarkt 11",
-// 		role: 3,
-// 		meta: {
-// 			birthsday: new Date("12.11.1979"),
-// 			hobby: "programming",
-// 		},
-// 	},
-// 	function (saved) {
-// 		console.info("Model saved: ", saved);
-// 	}
-// );
-
-/* MongoDB queries */
-Users.read({'role': 1}, function (users) {
-	console.info("Users: ", users);
-});
-
-/* Find */
-Users.first({ role: { $lte: 5, $gte: 3 } }, function (user) {
-	if (user !== null) {
-		console.info("User name: ", user.name);
-	} else {
-		console.info("No match found!");
-	}
-});
-
-
-/* Update */
-/* Users.getModel().update(
-	{ name: new RegExp("guppy", "gi") },
-	{ name: "Jack Black" },
-	function (error, user) {
-		// user.name = "Jack Black";
-		// user.save();
-		if (error) {
-			console.error(error);
-		} else {
-			console.log(user);
-		}
-	}
-);
- */
-/* Delete */
-/* Users.getModel().remove(
-	{ name: new RegExp("jani", "gi") },
-	function (error, removed) {
-		if (error) {
-			console.error(error);
-		} else {
-			console.log(removed);
-		}
-	}
-); */
-
-/* Read */
-Users.first({ name: new RegExp("guppy", "gi") }, function (user) {
-	if (user !== null) {
-		console.info("User name: ", user.name);
-	} else {
-		console.info("No match found!");
-	}
-});
-
-/* Users.getModel().isAdmin(2, function (error, data) {
-	console.log(error);
-	console.log(data);
-}); */
-
-// Users.read({ name: "madcage" }, function (data) {
-// 	console.log(data);
-// });
+let models = {};
+models.users = require("./models/users");
+models.users.setConnection(mongoose);
 
 /* Module practice */
 /* const mad = require("./my_modules/mad_module");
@@ -129,13 +35,80 @@ app.set("views", "./src/view");
 // app.use('/static',express.static(__dirname + "build/"));
 // app.use(favicon(path.join(__dirname, staticDir + "/img/", "favicon.ico")));
 
-app.use(function (req, res, next) {
-	// console.log(req.headers);
-
+app.use("/:model/:id*?", function (req, res, next) {
 	if (req.headers["x-requested-with"] == "XMLHttpRequest") {
-		Users.getModel().find({}, function (error, data) {
-			res.send(JSON.stringify(data));
-		});
+		switch (req.method.toLowerCase()) {
+			// READ
+			case "get":
+				models[req.params.model]
+					.getModel()
+					.find({}, function (err, data) {
+						res.send(JSON.stringify(data));
+					});
+				break;
+			// UPDATE
+			case "post":
+				var requestBody = "";
+				req.on("data", function (package) {
+					requestBody += package;
+				});
+				req.on("end", function () {
+					requestBody = JSON.parse(requestBody);
+					var newData = {};
+					for (var k in requestBody) {
+						if (k == "_id") {
+							continue;
+						}
+						newData[k] = requestBody[k];
+					}
+					models[req.params.model].getModel().update(
+						{
+							_id: requestBody._id,
+						},
+						newData,
+						function (err, user) {
+							res.send('{"success": true}');
+						}
+					);
+				});
+				break;
+			// CREATE
+			case "put":
+				var requestBody = "";
+				req.on("data", function (package) {
+					requestBody += package;
+				});
+				req.on("end", function () {
+					requestBody = JSON.parse(requestBody);
+					var row = {};
+					for (var k in requestBody) {
+						if (k == "_id") {
+							continue;
+						}
+						row[k] = requestBody[k];
+					}
+					models[req.params.model].create(row, function (data) {
+						res.send(JSON.stringify(data));
+					});
+				});
+				break;
+			// DELETE
+			case "delete":
+				if (req.params.id) {
+					let where = { _id: req.params.id };
+					models[req.params.model]
+						.getModel()
+						.remove(where, function (err, rem) {
+							if (err) console.error(err);
+							res.send(JSON.stringify(rem));
+						});
+				} else {
+					res.send('{"error": "no id"}');
+				}
+				break;
+			default:
+				res.send('{"error": "unsupported method"}');
+		}
 	} else {
 		next();
 	}

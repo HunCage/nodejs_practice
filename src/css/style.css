@@ -11,3 +11,7 @@
         font-size: 3.5rem;
         }
     }
+
+.is-error {
+    box-shadow: 0 0 4px red;
+}

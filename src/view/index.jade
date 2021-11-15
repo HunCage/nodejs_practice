@@ -11,11 +11,6 @@ block content
                 code padding-top: 60px;
                 |  on the
                 code main > .container
-                | 
-            p
-                | Back to
-                a(href='../examples/sticky-footer/') the default sticky footer
-                | minus the navbar.
             .row(data-ng-controller='priceController')
                 .col-xs-3
                     input.form-control(data-ng-model='yourPrice')
@@ -24,23 +19,11 @@ block content
                     p Your Price: {{calcOtherPrice(yourPrice) | currencyFilter}}   
                     p Full Price: {{yourPrice | currencyFilter: 'HUF'}}   
                     //- p Full Price: {{calcFullPrice(yourPrice) | currencyFilter: 'HUF'}}   
-
+                    p {{yourPrice}}
             .row(data-ng-controller='userController')
                 .col-xs-9
-                    p {{yourPrice}}
-                    table.table.table-dark
-                        thead 
-                            tr 
-                                th(data-ng-repeat='th in ths') {{th}}
-                        tbody
-                            tr(data-ng-repeat='row in users')
-                                td {{row._id}}
-                                td {{row.name}}
-                                td {{row.email}}
-                                td {{row.phone}}
-
-
-
-            ul.mt-5
-            each user in users
-                li.mb-5 id: #{user.id}: name: #{user.name}, email: #{user.email}, #{user.job}
+                    include ./userTable.jade
+            .row.col-xs-9
+                ul.mt-5
+                    each user in users
+                        li.mb-5 id: #{user.id}: name: #{user.name}, email: #{user.email}, #{user.job}
